@@ -39,6 +39,25 @@ class Updater {
   private autoUpdater: import('electron-updater').AppUpdater | null = null
   private initialized = false
 
+  /**
+   * 是否具备自动更新条件。
+   * 不能只看 app.isPackaged：win-unpacked 直接运行 exe 时它可能为 false，
+   * 但那是完整打包产物，只要 resources/app-update.yml 存在就说明能更新。
+   */
+  private canUpdate(): boolean {
+    try {
+      const resourcesPath = process.resourcesPath || ''
+      if (!resourcesPath) return false
+      const fs = require('node:fs') as typeof import('node:fs')
+      const path = require('node:path') as typeof import('node:path')
+      // electron-builder 打包时会写入 app-update.yml；开发态没有这个文件
+      const marker = path.join(resourcesPath, 'app-update.yml')
+      return fs.existsSync(marker)
+    } catch {
+      return false
+    }
+  }
+
   getState(): UpdateState {
     return { ...this.state, currentVersion: app.getVersion() }
   }
@@ -59,12 +78,18 @@ class Updater {
   private async ensure(): Promise<import('electron-updater').AppUpdater | null> {
     if (this.initialized) return this.autoUpdater
     this.initialized = true
-    if (!app.isPackaged) {
-      console.log('[update] 开发态跳过自动更新')
+    if (!this.canUpdate()) {
+      console.log('[update] 当前环境不支持自动更新（缺少 app-update.yml 或为开发态）')
       return null
     }
     try {
-      const { autoUpdater } = await import('electron-updater')
+      // electron-updater 是 CJS：动态 import 后可能是 { default: module } 或 module 本身
+      const mod = (await import('electron-updater')) as unknown as {
+        autoUpdater?: import('electron-updater').AppUpdater
+        default?: { autoUpdater?: import('electron-updater').AppUpdater }
+      }
+      const autoUpdater = mod.autoUpdater || mod.default?.autoUpdater
+      if (!autoUpdater) throw new Error('electron-updater 未导出 autoUpdater')
       autoUpdater.autoDownload = false
       autoUpdater.autoInstallOnAppQuit = true
       autoUpdater.logger = null
@@ -108,7 +133,7 @@ class Updater {
 
   /** 启动后延迟检查（不阻塞界面） */
   scheduleAutoCheck(delayMs = 8000): void {
-    if (!app.isPackaged) return
+    if (!this.canUpdate()) return
     setTimeout(() => {
       void this.check(true)
     }, delayMs)
