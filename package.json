@@ -1,6 +1,6 @@
 {
   "name": "xiongmao-ai-writer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "熊喵AI写作 - 全自动小说创作与番茄小说直发桌面客户端",
   "main": "./out/main/index.js",
   "author": "XiongMao Studio",
