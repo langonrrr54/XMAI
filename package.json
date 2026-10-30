@@ -1,0 +1,85 @@
+{
+  "name": "xiongmao-ai-writer",
+  "version": "0.1.0",
+  "description": "熊喵AI写作 - 全自动小说创作与番茄小说直发桌面客户端",
+  "main": "./out/main/index.js",
+  "author": "XiongMao Studio",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "dev": "electron-vite dev",
+    "start": "electron-vite preview",
+    "build": "electron-vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "dist": "npm run build && electron-builder --win --x64",
+    "dist:dir": "npm run build && electron-builder --win --x64 --dir"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11",
+    "sql.js": "^1.15.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/sql.js": "^1.4.9",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0",
+    "electron-vite": "^6.0.0",
+    "lucide-react": "^1.61.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5",
+    "zustand": "^5.0.16"
+  },
+  "build": {
+    "appId": "com.xiongmao.aiwriter",
+    "productName": "熊喵AI写作",
+    "directories": {
+      "output": "release",
+      "buildResources": "resources"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "node_modules/sql.js/dist/sql-wasm.wasm",
+        "to": "sql-wasm.wasm"
+      },
+      {
+        "from": "resources/icon.ico",
+        "to": "icon.ico"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "XiongMaoAIWriter-${version}-${arch}.${ext}",
+      "icon": "resources/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "熊喵AI写作",
+      "installerIcon": "resources/icon.ico",
+      "uninstallerIcon": "resources/icon.ico"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "langonrrr54",
+        "repo": "XMAI",
+        "releaseType": "release"
+      }
+    ],
+    "generateUpdatesFilesForAllChannels": true
+  }
+}

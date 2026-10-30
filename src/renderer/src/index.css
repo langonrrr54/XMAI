@@ -1,0 +1,308 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-mist-400: #8b93a7;
+  --color-mist-300: #aab1c2;
+  --color-accent: #f0b45c;
+  --color-accent-fg: #231603;
+  --color-fg: #ffffff;
+  --color-panel: #0f131b;
+  --color-panel2: #151a24;
+  --color-app: #080a0f;
+  --color-line: #ffffff;
+  --color-field: rgba(0, 0, 0, 0.3);
+  --font-serif-cn: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun', serif;
+}
+
+:root {
+  --accent-light: #f6c877;
+  color-scheme: dark;
+}
+
+/* ---------------- 主题：深色 / 浅色 ---------------- */
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --color-fg: #ffffff;
+  --color-panel: #0f131b;
+  --color-panel2: #151a24;
+  --color-app: #080a0f;
+  --color-line: #ffffff;
+  --color-field: rgba(0, 0, 0, 0.3);
+  --color-mist-400: #8b93a7;
+  --color-mist-300: #aab1c2;
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+  --color-fg: #161a22;
+  --color-panel: #ffffff;
+  --color-panel2: #f3f5f9;
+  --color-app: #eef1f6;
+  --color-line: #0b1220;
+  --color-field: rgba(15, 23, 42, 0.045);
+  --color-mist-400: #667085;
+  --color-mist-300: #4b5563;
+}
+
+/* ---------------- 主题色（深色模式） ---------------- */
+html[data-accent='amber'] {
+  --color-accent: #f0b45c;
+  --color-accent-fg: #231603;
+  --accent-light: #f6c877;
+}
+html[data-accent='blue'] {
+  --color-accent: #6ea8ff;
+  --color-accent-fg: #07162e;
+  --accent-light: #9cc8ff;
+}
+html[data-accent='green'] {
+  --color-accent: #5fce9a;
+  --color-accent-fg: #042016;
+  --accent-light: #8ee6bd;
+}
+html[data-accent='violet'] {
+  --color-accent: #b18cff;
+  --color-accent-fg: #170829;
+  --accent-light: #d0b6ff;
+}
+html[data-accent='rose'] {
+  --color-accent: #ff8fb3;
+  --color-accent-fg: #2a0713;
+  --accent-light: #ffb6cd;
+}
+html[data-accent='cyan'] {
+  --color-accent: #5fd3e8;
+  --color-accent-fg: #04202a;
+  --accent-light: #8be6f5;
+}
+html[data-accent='red'] {
+  --color-accent: #ff7d6e;
+  --color-accent-fg: #2a0a06;
+  --accent-light: #ffa99e;
+}
+
+/* ---------------- 主题色（浅色模式，压暗保证对比度） ---------------- */
+html[data-theme='light'][data-accent='amber'] {
+  --color-accent: #b97216;
+  --color-accent-fg: #ffffff;
+  --accent-light: #dea04d;
+}
+html[data-theme='light'][data-accent='blue'] {
+  --color-accent: #2f6fce;
+  --color-accent-fg: #ffffff;
+  --accent-light: #6a9ee8;
+}
+html[data-theme='light'][data-accent='green'] {
+  --color-accent: #1f9d63;
+  --color-accent-fg: #ffffff;
+  --accent-light: #4cc088;
+}
+html[data-theme='light'][data-accent='violet'] {
+  --color-accent: #7c4dd6;
+  --color-accent-fg: #ffffff;
+  --accent-light: #a583ea;
+}
+html[data-theme='light'][data-accent='rose'] {
+  --color-accent: #d94a78;
+  --color-accent-fg: #ffffff;
+  --accent-light: #ef85a5;
+}
+html[data-theme='light'][data-accent='cyan'] {
+  --color-accent: #0f8fa6;
+  --color-accent-fg: #ffffff;
+  --accent-light: #3fb8cd;
+}
+html[data-theme='light'][data-accent='red'] {
+  --color-accent: #d84a3c;
+  --color-accent-fg: #ffffff;
+  --accent-light: #ef7a6e;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-app);
+  color: var(--color-fg);
+  font-family: 'Microsoft YaHei UI', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-fg) 16%, transparent);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-fg) 26%, transparent);
+  background-clip: content-box;
+}
+
+@layer components {
+  .app-bg {
+    background:
+      radial-gradient(1200px 600px at 15% -10%, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent 60%),
+      radial-gradient(900px 500px at 95% 0%, color-mix(in srgb, var(--color-accent) 5%, transparent), transparent 55%),
+      var(--color-app);
+  }
+
+  /* 封面上的书名：限制行数并允许断词，避免长书名被裁 */
+.cover-text-safe {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-height: 2.6em;
+}
+
+.panel {
+    @apply rounded-2xl border border-line/8 bg-panel/90 backdrop-blur;
+  }
+
+  .panel-soft {
+    @apply rounded-xl border border-line/6 bg-fg/[0.025];
+  }
+
+  .accent-gradient {
+    background-image: linear-gradient(to bottom, var(--accent-light), var(--color-accent));
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-[13px] font-medium
+           transition-all duration-150 whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-[13px] font-medium
+           transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-40
+           hover:brightness-110 active:brightness-95;
+    background-image: linear-gradient(to bottom, var(--accent-light), var(--color-accent));
+    color: var(--color-accent-fg);
+    box-shadow: 0 6px 18px -8px color-mix(in srgb, var(--color-accent) 80%, transparent);
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-[13px] font-medium
+           transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-40
+           border border-line/10 bg-fg/[0.03] text-mist-300 hover:border-line/20 hover:bg-fg/[0.06] hover:text-fg;
+  }
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-[13px] font-medium
+           transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-40
+           border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20;
+  }
+  .btn-sm {
+    @apply px-2.5 py-1.5 text-xs;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-line/10 bg-field px-3 py-2 text-[13px] text-fg
+           outline-none transition placeholder:text-fg/25 focus:border-accent/60 focus:ring-2 focus:ring-accent/15;
+  }
+  .textarea {
+    @apply w-full resize-none rounded-lg border border-line/10 bg-field px-3 py-2 text-[13px] leading-relaxed text-fg
+           outline-none transition placeholder:text-fg/25 focus:border-accent/60 focus:ring-2 focus:ring-accent/15;
+  }
+  .label {
+    @apply mb-1.5 block text-[12px] font-medium tracking-wide text-mist-400;
+  }
+
+  .tag {
+    @apply inline-flex items-center rounded-md border border-line/10 bg-fg/[0.05] px-2 py-0.5 text-[11px] text-mist-300;
+  }
+
+  .nav-item {
+    @apply flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13px] text-mist-400 transition
+           hover:bg-fg/[0.05] hover:text-fg;
+  }
+  .nav-item-active {
+    @apply bg-accent/10 text-accent;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 20%, transparent);
+  }
+
+  .stat-card {
+    @apply rounded-xl border border-line/6 bg-fg/[0.025] px-4 py-3;
+  }
+  .stat-value {
+    @apply font-serif-cn text-[22px] leading-tight text-fg;
+  }
+  .stat-label {
+    @apply mt-0.5 text-[11px] tracking-wide text-mist-400;
+  }
+
+  .section-title {
+    @apply font-serif-cn text-[15px] font-semibold tracking-wide text-fg;
+  }
+
+  .scroll-area {
+    @apply overflow-y-auto overscroll-contain;
+  }
+
+  .prose-novel {
+    @apply font-serif-cn text-[16px] leading-[2] select-text;
+    color: color-mix(in srgb, var(--color-fg) 90%, transparent);
+  }
+  .prose-novel p {
+    @apply mb-4;
+  }
+}
+
+.novel-editor {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', serif;
+  font-size: 16px;
+  line-height: 2.1;
+  letter-spacing: 0.01em;
+  user-select: text;
+}
+
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-fg) 10%, transparent),
+    transparent
+  );
+}
+
+.glow-dot {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 14%, transparent);
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-fg) 3%, transparent) 25%,
+    color-mix(in srgb, var(--color-fg) 9%, transparent) 50%,
+    color-mix(in srgb, var(--color-fg) 3%, transparent) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.fade-up {
+  animation: fade-up 0.28s ease-out both;
+}
